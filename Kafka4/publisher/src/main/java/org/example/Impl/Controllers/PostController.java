@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.SneakyThrows;
 import org.example.Impl.DTO.PostRequestTo;
 import org.example.Impl.DTO.PostResponseTo;
-import org.example.Kafka.KafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,13 +24,11 @@ public class PostController {
     @Autowired
     private RestClient restClient;
 
-    private KafkaProducer kafkaProducer;
-
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
     private String uriBase = "http://localhost:24130/api/v1.0/posts";
 
-    /*@GetMapping
+    @GetMapping
     public ResponseEntity<List<?>> getPosts(@RequestHeader HttpHeaders headers) {
         return ResponseEntity.status(200).body(restClient.get()
                 .uri(uriBase)
@@ -91,36 +88,5 @@ public class PostController {
                 .headers(httpHeaders -> httpHeaders.addAll(headers))
                 .retrieve()
                 .body(ResponseEntity.class);
-    }*/
-
-    @GetMapping
-    public void getPosts(@RequestHeader HttpHeaders headers) {
-       kafkaProducer.send("GET POSTS REQUEST");
     }
-
-    @GetMapping("/{id}")
-    public void getPost(@PathVariable Long id) {
-        kafkaProducer.send("GET POST REQUEST");
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePost(@RequestHeader HttpHeaders headers, @PathVariable Long id) {
-        kafkaProducer.send("DELETE POST REQUEST");
-    }
-
-    @PostMapping
-    public void savePost(@RequestHeader HttpHeaders headers, @RequestBody PostRequestTo post) {
-        kafkaProducer.send("POST REQUEST");
-    }
-
-    @PutMapping()
-    public void updatePost(@RequestHeader HttpHeaders headers,@RequestBody PostRequestTo post) {
-        kafkaProducer.send("PUT POST REQUEST");
-    }
-
-    @GetMapping("/byNews/{id}")
-    public void getPostByNewsId(@RequestHeader HttpHeaders headers, @PathVariable Long id) {
-        kafkaProducer.send("GET BY NEWS REQUEST");
-    }
-
 }
